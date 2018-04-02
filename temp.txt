@@ -1,1 +1,0 @@
-[itr.start() for itr in re.finditer('timelapse_', info)]
