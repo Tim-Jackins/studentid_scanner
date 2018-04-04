@@ -7,7 +7,11 @@ This project started when I was late to school one day and noticed the arbitaril
 
 Solution
 ------
-So I thought: "Wow, this is dumb considering we have individual student IDs that could totally be used to sign in, especially because the administration paid a lot for these things." So I threw together a small program capable of
+So I thought: "Wow, this is dumb considering we have individual student IDs that could totally be used to sign in, especially because the administration paid a lot for these things." So I threw together a small program capable of snapping photos of IDs and reading useful info (ie name, ID) off of them. I then combined that with a program I had for writing data to google spreadsheets. This device is capable of signing in students in (INSERT TIME HERE) seconds.
+
+Instructions
+------
+
 
 Summary
 ------
