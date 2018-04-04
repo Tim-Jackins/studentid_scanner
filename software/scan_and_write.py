@@ -11,7 +11,7 @@ def get_image(camera, filename):
 	# Ramp the camera - these frames will be discarded and are only used to allow v4l2
 	# to adjust light levels, if necessary
 	print('Ramping camera...')
-    for i in range(ramp_frames):
+	for i in range(ramp_frames):
 		temp = get_image(camera)
 	print('Taking image...')
 	camera_capture = get_image(camera)
@@ -22,7 +22,7 @@ def get_image(camera, filename):
 
 # Construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-t", "--transition", required=True, default='y', help='Are you y or n for entering?')
+ap.add_argument("-t", "--transition", required=True, default='y', help='The transition state of the student y for entering else n')
 args = vars(ap.parse_args())
 
 # Arguments
