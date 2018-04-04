@@ -22,7 +22,8 @@ err_message = str(args['err_message'])
 
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
-credentials = ServiceAccountCredentials.from_json_keyfile_name('client_id.json', scope)
+home_directory = 'jtimmins'
+credentials = ServiceAccountCredentials.from_json_keyfile_name('/home/{0}/.credentials/client_id.json'.format(home_directory), scope)
 gc = gspread.authorize(credentials)
 sheet = gc.open_by_key('16Raypiv_F8OfcykO2V-4ToXJf2CYSo2ziBE4CNMVmxQ').sheet1
 
