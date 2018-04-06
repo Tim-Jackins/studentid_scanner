@@ -24,7 +24,7 @@ def get_image(camera):
 
 def take_image(camera, filename):
 	camera_capture = get_image(camera)
-	file = '/home/jtimmins/python/studentid_scanner/software/' + filename
+	file = './' + filename
 	cv2.imwrite(file, camera_capture)
 	del(camera)
 
@@ -37,7 +37,7 @@ def take_good_image(camera, filename):
 	print("Taking image...")
 	# Take the actual image we want to keep
 	camera_capture = get_image(camera)
-	file = '/home/jtimmins/python/studentid_scanner/software/' + filename
+	file = './' + filename
 	# A nice feature of the imwrite method is that it will automatically choose the
 	# correct format based on the file extension you provide. Convenient!
 	cv2.imwrite(file, camera_capture) 
