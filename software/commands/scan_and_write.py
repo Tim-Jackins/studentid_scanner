@@ -57,21 +57,21 @@ os.chdir('cut_up_card')
 
 print('Reading photo...')
 cardText = str(pytesseract.image_to_string(Image.open('cardadjust.png')).encode('utf-8'))
-#try:
-index = cardText.index('b\'') + 2
-while cardText[index].isalpha() or cardText[index] == ' ': index += 1
+try:
+	index = cardText.index('b\'') + 2
+	while cardText[index].isalpha() or cardText[index] == ' ': index += 1
 
-print('Name: {0}{1}Studentid: {2}{1}Transition: {3}'.format(
-	cardText[cardText.index('b\'') + 2: index], 
-	'\n', 
-	str(re.findall(r'\D(\d{9})\D', cardText)[0]),
-	transition))
-name = cardText[cardText.index('b\'') + 2: index]
-studentid = str(re.findall(r'\D(\d{9})\D', cardText)[0])
+	print('Name: {0}{1}Studentid: {2}{1}Transition: {3}'.format(
+		cardText[cardText.index('b\'') + 2: index], 
+		'\n', 
+		str(re.findall(r'\D(\d{9})\D', cardText)[0]),
+		transition))
+	name = cardText[cardText.index('b\'') + 2: index]
+	studentid = str(re.findall(r'\D(\d{9})\D', cardText)[0])
 
-os.chdir('..')
-print('Writing to spreadsheet')
-subprocess.call(['python3', 'write_to_sheet.py', '-n', name, '-i', studentid, '-t', transition])
-#except:
-#	print('Reading failed printing observed text:')
-#	print(cardText)
+	os.chdir('..')
+	print('Writing to spreadsheet')
+	subprocess.call(['python3', 'write_to_sheet.py', '-n', name, '-i', studentid, '-t', transition])
+except Exception as e:
+	print('Writing error to spreadsheet')
+	subprocess.call(['python3', 'write_to_sheet.py', '-e', 'True', '-em', cardText, '-ex', e])

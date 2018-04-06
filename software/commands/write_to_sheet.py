@@ -10,6 +10,7 @@ ap.add_argument('-i', '--id', required=False, default='12345678', help='ID# of t
 ap.add_argument('-t', '--transition', required=False, default='Exiting', help='The transition state of the student (either Entering or Exiting)')
 ap.add_argument('-e', '--error', required=False, default='False', help='Whether there is an error (either True or False)')
 ap.add_argument('-em', '--err_message', required=False, default='', help='An explanation of the error (an error message or a read out of what the scanner picked up)')
+ap.add_argument('-ex', '--err_exception', required=False, default='', help='The literal error message')
 args = vars(ap.parse_args())
 
 # Arguments
@@ -19,6 +20,7 @@ studentid = str(args['id'])
 transition = str(args['transition'])
 error = bool(args['error'])
 err_message = str(args['err_message'])
+err_exception = str(args['err_exception'])
 
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
@@ -42,6 +44,7 @@ else:
 	infoToWrite.append(current_datetime)
 	infoToWrite.append('ERROR')
 	infoToWrite.append(err_message)
+	infoToWrite.append(err_exception)
 
 count = 1
 while not sheet.acell('A' + str(count)).value == '':
