@@ -6,10 +6,9 @@ import re
 import cv2
 from PIL import Image, ImageEnhance, ImageFilter
 
-def get_image(camera, filename):
+def get_image(camera):
 	ramp_frames = 30 #This decides how much ramp the camera has to prepare
-	# Ramp the camera - these frames will be discarded and are only used to allow v4l2
-	# to adjust light levels, if necessary
+	# Ramp the camera - these frames will be discarded and are only used to allow webcam to adjust light levels, if necessary
 	print('Ramping camera...')
 	for i in range(ramp_frames):
 		temp = get_image(camera)
@@ -34,11 +33,9 @@ transition = 'Entering' if args['transition'] == 'y' else 'Exiting'
 print('Scanning photo id...')
 #subprocess.call(['convert', picname, '-rotate', '270', picname]) #only rotate if you have to
 
-img = cv2.imread("path/to/img.png")
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # You may need to convert the color
-im_pil = Image.fromarray(img)
-
-card = Image.open(picname)
+camera_port = 1
+camera = cv2.VideoCapture(camera_port)
+card = get_image(camera)
 
 print('Processing photo...')
 card = card.filter(ImageFilter.MedianFilter())
