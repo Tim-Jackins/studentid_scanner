@@ -48,5 +48,5 @@ def take_good_image(camera, filename):
 if __name__ == '__main__':
 	camera_port = 1
 	camera = cv2.VideoCapture(camera_port)
-	take_image(camera, 'test_img_bad.png')
-	take_good_image(camera, 'test_img_good.png')
+	take_image(camera, 'img_bad.png')
+	take_good_image(camera, 'img_good.png')
