@@ -28,8 +28,9 @@ card = Image.open('backup/' + picname) # the second one
 print('Processing photo...')
 card = card.filter(ImageFilter.MedianFilter())
 enhancer = ImageEnhance.Contrast(card)
-card = enhancer.enhance(2)
-card = card.convert('1')
+#card = enhancer.enhance(2)
+#card = card.convert('1')
+card.save('cardAdjust.jpg')
 #name = card.crop((135, 940, 880, 1020))
 #studentid = card.crop((130, 1090, 590, 1150))
 #card.save('cardadjust.jpg')
@@ -41,11 +42,13 @@ card = card.convert('1')
 print('Reading photo...')
 #cardText = str(pytesseract.image_to_string(Image.open('cardadjust.png')).encode('utf-8'))
 cardText = str(pytesseract.image_to_string(card).encode('utf-8'))
-#try:
-index = cardText.index('b\'') + 2
-while cardText[index].isalpha() or cardText[index] == ' ': index += 1
-name = cardText[cardText.index('b\'') + 2: index]
-studentid = str(re.findall(r'\D(\d{9})\D', cardText)[0])
+try:
+	index = cardText.index('b\'') + 2
+	while cardText[index].isalpha() or cardText[index] == ' ': index += 1
+	name = cardText[cardText.index('b\'') + 2: index]
+	studentid = str(re.findall(r'\D(\d{9})\D', cardText)[0])
+except:
+	print(cardText)
 #if input('Want to write to the sheet (y for yes): ') == 'y':
 if False:
 	os.chdir('..')

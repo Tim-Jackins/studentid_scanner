@@ -32,8 +32,8 @@ class bin_calc:
 
 class studentid_scanner_demo:
 	def scan_card(self):
+		scan_out = os.popen('python3 demos/reader/read_card.py -n {0} -t y -l demos/reader/'.format(self.tkvar.get())).read()
 		try:
-			scan_out = os.popen('python3 demos/reader/read_card.py -n {0} -t y -l demos/reader/'.format(self.tkvar.get())).read()
 			self.name = scan_out[scan_out.index('\t\t') + 2 : scan_out.index(' \n')]
 			self.id = str(re.findall(r'\D(\d{9})\D', scan_out)[0])
 			self.output_area.delete('1.0',END)
@@ -47,6 +47,7 @@ ID#:		{1}\n'.format(self.name, self.id))
 			self.output_area.delete('2.0',END)
 			self.output_area.delete('3.0',END)
 			self.output_area.insert(END, 'Results\nERROR')
+			print(scan_out)
 		
 	def scanning(self, var):
 		print(var)
