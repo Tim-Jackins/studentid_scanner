@@ -39,22 +39,22 @@ card = get_image(camera)
 
 print('Processing photo...')
 card = card.filter(ImageFilter.MedianFilter())
-enhancer = ImageEnhance.Contrast(card)
-card = enhancer.enhance(2)
-card = card.convert('1')
+#enhancer = ImageEnhance.Contrast(card)
+#card = enhancer.enhance(2)
+card = card.convert('L')
 
 #name = card.crop((135, 940, 880, 1020))
 #studentid = card.crop((130, 1090, 590, 1150))
 
 card.save('cardadjust.jpg')
-subprocess.call(['mogrify', '-format', 'png', 'cardadjust.jpg'])
-os.system('rm *.jpg')
-os.system('mv cardadjust.png cut_up_card')
-os.chdir('cut_up_card')
+#subprocess.call(['mogrify', '-format', 'png', 'cardadjust.jpg'])
+#os.system('rm *.jpg')
+#os.system('mv cardadjust.png cut_up_card')
+#os.chdir('cut_up_card')
 
 print('Reading photo...')
-cardText = str(pytesseract.image_to_string(Image.open('cardadjust.png')).encode('utf-8'))
-try:
+cardText = str(pytesseract.image_to_string(card)).encode('utf-8'))
+try:#needs to be updated to accurately comb through ids in scanner
 	index = cardText.index('b\'') + 2
 	while cardText[index].isalpha() or cardText[index] == ' ': index += 1
 
@@ -67,8 +67,9 @@ try:
 	studentid = str(re.findall(r'\D(\d{9})\D', cardText)[0])
 
 	os.chdir('..')
-	print('Writing to spreadsheet')
-	subprocess.call(['python3', 'write_to_sheet.py', '-n', name, '-i', studentid, '-t', transition])
+	#print('Writing to spreadsheet')
+	#subprocess.call(['python3', 'write_to_sheet.py', '-n', name, '-i', studentid, '-t', transition])
 except Exception as e:
-	print('Writing error to spreadsheet')
-	subprocess.call(['python3', 'write_to_sheet.py', '-e', 'True', '-em', cardText, '-ex', e])
+	print('Print exception: {0}'.format(e))
+	#print('Writing error to spreadsheet')
+	#subprocess.call(['python3', 'write_to_sheet.py', '-e', 'True', '-em', cardText, '-ex', e])
