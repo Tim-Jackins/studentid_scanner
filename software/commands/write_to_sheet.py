@@ -3,6 +3,8 @@ import argparse
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+start_time = time.time()
+
 # Construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument('-n', '--name', required=False, default='John Doe', help='Name of the student you want to document')
@@ -46,26 +48,10 @@ else:
 	infoToWrite.append(err_message)
 	infoToWrite.append(err_exception)
 
-count = 1
-while not sheet.acell('A' + str(count)).value == '':
-	print(count)
-	count += 1
-row = count
+row = len(sheet.col_values(1)) + 1
 
 for i in range(len(infoToWrite)):
-	#print('{0}{1} data: {2}'.format(chr(65 + i), 1, info[i]))
-	print(infoToWrite[i])
+	#print(infoToWrite[i])
 	sheet.update_acell(chr(65 + i) + str(row), str(infoToWrite[i]))
 
-#print(sheet.acell('A2').value == '')
-#print(type(sheet.acell('A1').value))
-
-
-
-
-
-
-
-
-
-
+print('Finished in {0}'.format(round(time.time() - start_time, 2)))

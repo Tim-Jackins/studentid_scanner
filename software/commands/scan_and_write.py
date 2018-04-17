@@ -40,12 +40,23 @@ transition = 'Entering' if args['transition'] == 'y' else 'Exiting'
 print('Scanning photo id...')
 #subprocess.call(['convert', picname, '-rotate', '270', picname]) #only rotate if you have to
 
-out = os.popen('v4l2-ctl -d /dev/video1 --list-ctrls').read()
+#os.system('./set_setting.sh')
+#out = os.popen('v4l2-ctl -d /dev/video1 --list-ctrls').read()
+#print(out)
+#search_str = 'focus_auto (bool)   : default=1 value='
+#if bool(int(out[out.index(search_str) + len(search_str):out.index(search_str) + len(search_str) + 1])):
+#	print('Changing settings')
+#	webcam_settings = { 'focus_auto' : 0, 'focus_absolute' : 255 }
+#	for setting in webcam_settings:
+#		subprocess.call(['v4l2-ctl -d 1 --set-ctrl {0}={1}'.format(setting, str(webcam_settings[setting]))], shell=True)
+#else:
+#	print('Setting focus')
+#	subprocess.call(['v4l2-ctl -d 1 --set-ctrl {0}={1}'.format('focus_absolute', '255')], shell=True)
 
-if bool(out[579]):
-	webcam_settings = { 'focus_auto' : 0, 'focus_absolute' : 255 }
-	for setting in webcam_settings:
-		subprocess.call(['v4l2-ctl -d 1 --set-ctrl {0}={1}'.format(setting, str(webcam_settings[setting]))], shell=True)
+print('Changing settings')
+webcam_settings = { 'focus_auto' : 0, 'focus_absolute' : 255 }
+for setting in webcam_settings:
+	subprocess.call(['v4l2-ctl -d 1 --set-ctrl {0}={1}'.format(setting, str(webcam_settings[setting]))], shell=True)
 
 camera_port = 1
 
@@ -62,9 +73,7 @@ card = card.filter(ImageFilter.MedianFilter())
 #enhancer = ImageEnhance.Contrast(card)
 #card = enhancer.enhance(2)
 card = card.convert('L')
-
-#name = card.crop((135, 940, 880, 1020))
-#studentid = card.crop((130, 1090, 590, 1150))
+card = card.crop((500, 480, 1185, 700))
 
 card.save('cardadjust.jpg')
 #subprocess.call(['mogrify', '-format', 'png', 'cardadjust.jpg'])
@@ -74,7 +83,7 @@ card.save('cardadjust.jpg')
 
 print('Reading photo...')
 cardText = str(pytesseract.image_to_string(card).encode('utf-8'))
-try:#needs to be updated to accurately comb through ids in scanner
+try:
 	index = cardText.index('b\'') + 2
 	while cardText[index].isalpha() or cardText[index] == ' ': index += 1
 

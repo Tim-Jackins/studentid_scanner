@@ -12,3 +12,5 @@ So I thought: "Wow, this is dumb considering we have individual student IDs that
 Summary
 ---
 This thing will include code for scanning IDs, circuits, and 3d files for the scanner
+
+cam init /usr/local/initialize_cam.sh
