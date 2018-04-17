@@ -35,7 +35,7 @@ current_datetime = time.strftime("%I:%M:%S") + time.strftime("%d/%m/%Y")
 
 infoToWrite = []
 
-if not error:
+if error:
 	infoToWrite.append(current_datetime)
 	infoToWrite.append(name)
 	infoToWrite.append(studentid)

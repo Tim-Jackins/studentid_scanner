@@ -4,14 +4,21 @@ import subprocess
 import os
 import re
 import cv2
+import time
 from PIL import Image, ImageEnhance, ImageFilter
 
 def get_image(camera):
-	ramp_frames = 30 #This decides how much ramp the camera has to prepare
+	# read is the easiest way to get a full image out of a VideoCapture object.
+	retval, im = camera.read()
+	del(camera)
+	return im
+
+def take_image(camera):
+	#ramp_frames = 1 #This decides how much ramp the camera has to prepare
 	# Ramp the camera - these frames will be discarded and are only used to allow webcam to adjust light levels, if necessary
-	print('Ramping camera...')
-	for i in range(ramp_frames):
-		temp = get_image(camera)
+	#print('Ramping camera...')
+	#for i in range(ramp_frames):
+	#	temp = get_image(camera)
 	print('Taking image...')
 	camera_capture = get_image(camera)
 	del(camera)
@@ -21,7 +28,7 @@ def get_image(camera):
 
 # Construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-t", "--transition", required=True, default='y', help='The transition state of the student y for entering else n')
+ap.add_argument("-t", "--transition", required=False, default='y', help='The transition state of the student y for entering else n')
 args = vars(ap.parse_args())
 
 # Arguments
@@ -33,9 +40,22 @@ transition = 'Entering' if args['transition'] == 'y' else 'Exiting'
 print('Scanning photo id...')
 #subprocess.call(['convert', picname, '-rotate', '270', picname]) #only rotate if you have to
 
+out = os.popen('v4l2-ctl -d /dev/video1 --list-ctrls').read()
+
+if bool(out[579]):
+	webcam_settings = { 'focus_auto' : 0, 'focus_absolute' : 255 }
+	for setting in webcam_settings:
+		subprocess.call(['v4l2-ctl -d 1 --set-ctrl {0}={1}'.format(setting, str(webcam_settings[setting]))], shell=True)
+
 camera_port = 1
+
 camera = cv2.VideoCapture(camera_port)
-card = get_image(camera)
+camera.set(3, 1280) # set the resolution
+camera.set(4, 720)
+
+card = take_image(camera)
+
+camera.release
 
 print('Processing photo...')
 card = card.filter(ImageFilter.MedianFilter())
@@ -53,7 +73,7 @@ card.save('cardadjust.jpg')
 #os.chdir('cut_up_card')
 
 print('Reading photo...')
-cardText = str(pytesseract.image_to_string(card)).encode('utf-8'))
+cardText = str(pytesseract.image_to_string(card).encode('utf-8'))
 try:#needs to be updated to accurately comb through ids in scanner
 	index = cardText.index('b\'') + 2
 	while cardText[index].isalpha() or cardText[index] == ' ': index += 1
@@ -66,10 +86,9 @@ try:#needs to be updated to accurately comb through ids in scanner
 	name = cardText[cardText.index('b\'') + 2: index]
 	studentid = str(re.findall(r'\D(\d{9})\D', cardText)[0])
 
-	os.chdir('..')
-	#print('Writing to spreadsheet')
-	#subprocess.call(['python3', 'write_to_sheet.py', '-n', name, '-i', studentid, '-t', transition])
+	print('Writing to spreadsheet')
+	subprocess.call(['python3', 'write_to_sheet.py', '-n', name, '-i', studentid, '-t', transition])
 except Exception as e:
 	print('Print exception: {0}'.format(e))
-	#print('Writing error to spreadsheet')
-	#subprocess.call(['python3', 'write_to_sheet.py', '-e', 'True', '-em', cardText, '-ex', e])
+	print('Writing error to spreadsheet')
+	subprocess.call(['python3', 'write_to_sheet.py', '-e', 1, '-em', cardText, '-ex', e])
