@@ -14,14 +14,13 @@ def get_image(camera):
 	return im
 
 def take_image(camera):
-	#ramp_frames = 1 #This decides how much ramp the camera has to prepare
+	ramp_frames = 5 #This decides how much ramp the camera has to prepare
 	# Ramp the camera - these frames will be discarded and are only used to allow webcam to adjust light levels, if necessary
-	#print('Ramping camera...')
-	#for i in range(ramp_frames):
-	#	temp = get_image(camera)
+	for i in range(ramp_frames):
+		temp = get_image(camera)
 	print('Taking image...')
 	camera_capture = get_image(camera)
-	del(camera)
+	#del(camera)
 	img = cv2.cvtColor(camera_capture, cv2.COLOR_BGR2RGB)
 	im_pil = Image.fromarray(img)
 	return im_pil
@@ -66,6 +65,7 @@ camera.set(3, 1280) # set the resolution
 camera.set(4, 720)
 
 card = take_image(camera)
+card = take_image(camera)
 
 #camera.release()
 
@@ -76,7 +76,6 @@ card = card.filter(ImageFilter.MedianFilter())
 card = card.convert('L')
 card = card.crop((500, 480, 1185, 700))
 
-card.save('cardadjust.jpg')
 #subprocess.call(['mogrify', '-format', 'png', 'cardadjust.jpg'])
 #os.system('rm *.jpg')
 #os.system('mv cardadjust.png cut_up_card')
@@ -88,19 +87,24 @@ try:
 	index = cardText.index('b\'') + 2
 	while cardText[index].isalpha() or cardText[index] == ' ': index += 1
 
-
+	info_to_write = []
+	info_to_write.append(cardText[cardText.index('b\'') + 2: index])
+	info_to_write.append('\n')
+	info_to_write.append(str(re.findall(r'\D(\d{9})\D', cardText)[0]))
+	info_to_write.append(transition)
 	
-	print('Name: {0}{1}Studentid: {2}{1}Transition: {3}'.format(
-		cardText[cardText.index('b\'') + 2: index], 
-		'\n', 
-		str(re.findall(r'\D(\d{9})\D', cardText)[0]),
-		transition))
+	print('Name: {0}{1}Studentid: {2}{1}Transition: {3}'.format(*info_to_write))
 	name = cardText[cardText.index('b\'') + 2: index]
 	studentid = str(re.findall(r'\D(\d{9})\D', cardText)[0])
 
 	print('Writing to spreadsheet')
+	#del(camera)
 	subprocess.call(['python3', 'write_to_sheet.py', '-n', name, '-i', studentid, '-t', transition])
 except Exception as e:
-	print('Print exception: {0}'.format(e))
+	print('Printing exception... {0}'.format(e))
+	print('Retrying\n\n')
+	card.save('card_fail.jpg')
+	del(camera)
+	subprocess.call(['python3', 'scan_and_write.py', '-t', transition])
 	#print('Writing error to spreadsheet')
 	#subprocess.call(['python3', 'write_to_sheet.py', '-e', 1, '-em', cardText, '-ex', e])
