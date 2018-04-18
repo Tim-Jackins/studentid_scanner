@@ -88,6 +88,8 @@ try:
 	index = cardText.index('b\'') + 2
 	while cardText[index].isalpha() or cardText[index] == ' ': index += 1
 
+
+	
 	print('Name: {0}{1}Studentid: {2}{1}Transition: {3}'.format(
 		cardText[cardText.index('b\'') + 2: index], 
 		'\n', 
@@ -100,5 +102,5 @@ try:
 	subprocess.call(['python3', 'write_to_sheet.py', '-n', name, '-i', studentid, '-t', transition])
 except Exception as e:
 	print('Print exception: {0}'.format(e))
-	print('Writing error to spreadsheet')
-	subprocess.call(['python3', 'write_to_sheet.py', '-e', 1, '-em', cardText, '-ex', e])
+	#print('Writing error to spreadsheet')
+	#subprocess.call(['python3', 'write_to_sheet.py', '-e', 1, '-em', cardText, '-ex', e])
