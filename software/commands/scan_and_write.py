@@ -53,10 +53,11 @@ print('Scanning photo id...')
 #	print('Setting focus')
 #	subprocess.call(['v4l2-ctl -d 1 --set-ctrl {0}={1}'.format('focus_absolute', '255')], shell=True)
 
-print('Changing settings')
+print('Changing settings') #THIS IS BUT A TEMPORARY FIX
 webcam_settings = { 'focus_auto' : 0, 'focus_absolute' : 255 }
 for setting in webcam_settings:
-	subprocess.call(['v4l2-ctl -d 1 --set-ctrl {0}={1}'.format(setting, str(webcam_settings[setting]))], shell=True)
+	out = os.popen('v4l2-ctl -d /dev/video1 -c {0}={1}'.format(setting, str(webcam_settings[setting])))
+	#subprocess.call(['v4l2-ctl -d /dev/video1 -c {0}={1}'.format(setting, str(webcam_settings[setting] ) ) ] , shell=True)
 
 camera_port = 1
 
@@ -66,7 +67,7 @@ camera.set(4, 720)
 
 card = take_image(camera)
 
-camera.release
+#camera.release()
 
 print('Processing photo...')
 card = card.filter(ImageFilter.MedianFilter())
