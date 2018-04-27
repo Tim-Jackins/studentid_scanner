@@ -51,6 +51,8 @@ Next up all the module requirements:
 sudo -H pip3 install --trusted-host pypi.python.org -r requirements.txt
 ```
 
+For any questions about the google spreadsheet api please visit [this tutorial](https://github.com/burnash/gspread)
+
 ## Usage
 
 ### Demo
