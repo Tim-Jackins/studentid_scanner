@@ -11,7 +11,7 @@ Describe your issue here.
 - [ ] discussion
 
 ### Requirements (place an x in each of the [ ])
-- [ ] I've read and understood the Contributing guidelines and have done my best effort to follow them.
+- [ ] I've read and understood the Contributing guidelines (outlined in the [Contrubute section](/README.md)) and have done my best effort to follow them.
 - [ ] I've read and agree to the Code of Conduct.
 - [ ] I've searched for any related issues and avoided creating a duplicate issue.
 
