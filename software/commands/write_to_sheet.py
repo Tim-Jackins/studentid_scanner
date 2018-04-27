@@ -1,6 +1,7 @@
 import time
 import argparse
 import gspread
+import os
 from oauth2client.service_account import ServiceAccountCredentials
 
 start_time = time.time()
@@ -29,10 +30,8 @@ scope = ['https://spreadsheets.google.com/feeds',
 home_directory = 'jtimmins'
 credentials = ServiceAccountCredentials.from_json_keyfile_name('/home/{0}/.credentials/client_id.json'.format(home_directory), scope)
 gc = gspread.authorize(credentials)
-sheet = gc.open_by_key('16Raypiv_F8OfcykO2V-4ToXJf2CYSo2ziBE4CNMVmxQ').sheet1
+sheet = gc.open_by_key(os.environ['student_id_SPREADSHEET_TOKEN']).sheet1
 
-#print (time.strftime("%H:%M:%S")) 
-## 12 hour format ##
 current_datetime = time.strftime("%I:%M:%S") + time.strftime("%d/%m/%Y")
 
 infoToWrite = []

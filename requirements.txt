@@ -1,0 +1,8 @@
+PIL
+natsort
+gspread
+pytesseract
+argparse
+cv2
+oauth2client
+gspread
