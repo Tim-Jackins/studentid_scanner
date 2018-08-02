@@ -1,6 +1,6 @@
 # Student ID Scanner
 
-> This repository includes the code and 3d files for my lightweight portable ID scanner.
+> The code and 3d files for my lightweight portable ID scanner.
 
 The acrylic build consists of two parts: one for the holding of cards and one for the camera mount. The webcam should be placed in the mount, as it is shown in solid works, and then plugged into your computer. You can then run the code and scan IDs to your hearts content.
 
